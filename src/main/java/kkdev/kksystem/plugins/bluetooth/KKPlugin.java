@@ -20,9 +20,8 @@ public final class KKPlugin extends KKPluginBase {
     }
 
     @Override
-    public void PluginInit(IPluginBaseInterface BaseConnector) {
-        super.PluginInit(BaseConnector);
-      
+    public void PluginInit(IPluginBaseInterface BaseConnector, String GlobalConfUID) {
+        super.PluginInit(BaseConnector, GlobalConfUID); 
     }
 
    
