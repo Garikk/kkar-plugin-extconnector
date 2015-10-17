@@ -22,7 +22,7 @@ public class BTPluginInfo  implements IPluginInfoRequest {
     {
         PluginInfo Ret=new PluginInfo();
         
-        Ret.PluginName="KKBTReader";
+        Ret.PluginName="KKBTAdapter";
         Ret.PluginDescription="Basic Bluetooth adapter plugin";
         Ret.PluginType = KK_PLUGIN_TYPE.PLUGIN_PROCESSOR;
         Ret.PluginVersion=1;
