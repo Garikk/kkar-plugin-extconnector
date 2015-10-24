@@ -1,4 +1,4 @@
-package kkdev.kksystem.plugins.bluetooth;
+package kkdev.kksystem.plugin.extconnector;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -7,7 +7,6 @@ package kkdev.kksystem.plugins.bluetooth;
  */
 
 
-import kkdev.kksystem.base.constants.PluginConsts.KK_PLUGIN_TYPE;
 import kkdev.kksystem.base.classes.plugins.PluginInfo;
 import kkdev.kksystem.base.classes.plugins.simple.IPluginInfoRequest;
 import kkdev.kksystem.base.constants.PluginConsts;
@@ -16,15 +15,14 @@ import kkdev.kksystem.base.constants.PluginConsts;
  *
  * @author blinov_is e
  */
-public class BTPluginInfo  implements IPluginInfoRequest {
+public class ECPluginInfo  implements IPluginInfoRequest {
     @Override
     public PluginInfo GetPluginInfo()
     {
         PluginInfo Ret=new PluginInfo();
         
-        Ret.PluginName="KKBTAdapter";
-        Ret.PluginDescription="Basic Bluetooth adapter plugin";
-        Ret.PluginType = KK_PLUGIN_TYPE.PLUGIN_PROCESSOR;
+        Ret.PluginName="KKEConnector";
+        Ret.PluginDescription="Basic external connecotor";
         Ret.PluginVersion=1;
         Ret.Enabled=true;
         Ret.ReceivePins = GetMyReceivePinInfo();
