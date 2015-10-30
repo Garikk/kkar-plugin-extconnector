@@ -23,6 +23,7 @@ public class EXAdapterConfig {
     
     public String Inet_ServerHost;
     public int Inet_ServerPort;
+    public String Inet_ExService;
     
     public String BT_DeviceName;
 }
