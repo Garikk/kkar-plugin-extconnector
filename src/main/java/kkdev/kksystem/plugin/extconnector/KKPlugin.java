@@ -22,16 +22,16 @@ public final class KKPlugin extends KKPluginBase {
 
     @Override
     public void PluginInit(IPluginBaseInterface BaseConnector, String GlobalConfUID) {
-        Global.EM.Init(this);
         super.PluginInit(BaseConnector, GlobalConfUID); 
+        Global.EM.Init(this);
     }
 
    
     @Override
     public PluginMessage ExecutePin(PluginMessage Pin) {
-        Global.EM.ReceivePin(Pin);
         super.ExecutePin(Pin);
- 
+        Global.EM.ReceivePin(Pin);
+
         return null;
     }
 }

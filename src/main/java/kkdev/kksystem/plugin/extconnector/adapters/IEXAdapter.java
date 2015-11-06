@@ -15,4 +15,6 @@ public interface IEXAdapter {
     public void SetActive();
     public void SetInactive();
     public  PluginMessage ExecutePinCommand(PluginMessage PP);
+    public void ReadPinCommands();
+    public int GetIntervalTune();
 }
