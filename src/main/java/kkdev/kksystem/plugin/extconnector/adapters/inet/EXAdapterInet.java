@@ -38,20 +38,21 @@ public class EXAdapterInet implements IEXAdapter {
     Deque<PluginMessage> PMStack;
     IEXConnManager ConnManager;
     int IntervalTune;
-    
+
     EXAdapterConfig Configuration;
     final static String ___TEST_KKCAR_UUID_ = "2e2efd7b-ab83-42fa-9c00-2e45bb4b3ba1";
 
     public EXAdapterInet(EXAdapterConfig Conf, IEXConnManager Conn) {
         Configuration = Conf;
-        ConnManager=Conn;
-        PMStack=new ArrayDeque<>();
+        ConnManager = Conn;
+        PMStack = new ArrayDeque<>();
     }
+
     @Override
     public int GetIntervalTune() {
         return IntervalTune;
     }
-    
+
     @Override
     public PluginMessage ExecutePinCommand(PluginMessage PP) {
         PMStack.add(PP);
@@ -60,27 +61,38 @@ public class EXAdapterInet implements IEXAdapter {
 
     @Override
     public void SetActive() {
-     //   throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //   throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void SetInactive() {
-     //   throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //   throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public void ReadPinCommands() {
-      WM_EXConn_PinData[] ForRet= GetPinData();
-      
-      for (WM_EXConn_PinData DT:ForRet)
-      {
-          for (PluginMessage PM:DT.PinData)
-          {
-              ConnManager.ExecPINCommand(PM);
-          }
-      }
-       
+        WM_EXConn_PinData[] ForRet = GetPinData();
+        //
+        PluginMessage[] PlM=new PluginMessage[1];
+        while (PMStack.size()>0)
+        {
+            PlM[0]=PMStack.poll();
+            PostPinData(PlM);
+        }
+        //
+        
+        
+        if (ForRet==null)
+            return;
+        
+        for (WM_EXConn_PinData DT : ForRet) {
+            for (PluginMessage PM : DT.PinData) {
+                ConnManager.ExecPINCommand(PM);
+            }
+        }
+
     }
+
     public void SendPinData() {
         HttpClient client = HttpClientBuilder.create().build();
     }
@@ -92,23 +104,24 @@ public class EXAdapterInet implements IEXAdapter {
 
         try {
             HttpClient client = HttpClientBuilder.create().build();
-            HttpPost post = new HttpPost("http://"+Configuration.Inet_ServerHost + ":" + Configuration.Inet_ServerPort + "/" + Configuration.Inet_ExService);
+            HttpPost post = new HttpPost("http://" + Configuration.Inet_ServerHost + ":" + Configuration.Inet_ServerPort + "/" + Configuration.Inet_ExService);
 
             post.setEntity(new UrlEncodedFormEntity(GetPinRequest()));
 
             HttpResponse response = client.execute(post);
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            Ans = gson.fromJson(rd, WM_Answer.class
-            );
 
-              System.out.println("[EXA][DBG] "+Configuration.Inet_ServerHost + ":" + Configuration.Inet_ServerPort + "/" + Configuration.Inet_ExService);
+            Ans = gson.fromJson(rd, WM_Answer.class);
+
+            System.out.println("[EXA][DBG] " + Configuration.Inet_ServerHost + ":" + Configuration.Inet_ServerPort + "/" + Configuration.Inet_ExService);
             if (Ans.AnswerState == 0) {
-                WM_EXConn_PinData[] Ret=gson.fromJson(Ans.JsonData, WM_EXConn_PinData[].class);
-                if (Ret.length>0)
-                    IntervalTune=1;
-                else
-                    IntervalTune=0;
-              
+                WM_EXConn_PinData[] Ret = gson.fromJson(Ans.JsonData, WM_EXConn_PinData[].class);
+                if (Ret.length > 0) {
+                    IntervalTune = 1;
+                } else {
+                    IntervalTune = 0;
+                }
+
                 System.out.println("[EXA][DBG] OK");
                 return Ret;
             } else {
@@ -148,7 +161,7 @@ public class EXAdapterInet implements IEXAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-          return 1;
+        return 1;
     }
 
     private static List<NameValuePair> GetPinRequest() {
@@ -172,15 +185,11 @@ public class EXAdapterInet implements IEXAdapter {
 
         return nameValuePairs;
     }
-   
-    private WM_EXConn_PinData PluginMessagesToPinData(PluginMessage[] PM)
-    {
-        WM_EXConn_PinData Ret=new WM_EXConn_PinData();
-        Ret.PinData=PM;
+
+    private WM_EXConn_PinData PluginMessagesToPinData(PluginMessage[] PM) {
+        WM_EXConn_PinData Ret = new WM_EXConn_PinData();
+        Ret.PinData = PM;
         return Ret;
     }
-
-    
-
 
 }

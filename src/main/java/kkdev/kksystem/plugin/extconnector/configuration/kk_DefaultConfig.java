@@ -19,7 +19,7 @@ public abstract class kk_DefaultConfig {
         AD.AdapterID="KKMASTER_INET";
         AD.AdapterName="KK Master Site";
         AD.AdapterType=EXAdapterConfig.EXAdapter_Types.EXA_Internet;
-        AD.Inet_ExService="extconnector";
+        AD.Inet_ExService="extconnector/extconnector";
         AD.Inet_ServerHost="supergarikk.dlinkddns.com";
         AD.Inet_ServerPort=80;
         
