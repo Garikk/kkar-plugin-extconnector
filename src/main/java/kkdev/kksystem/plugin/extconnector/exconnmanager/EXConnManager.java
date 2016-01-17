@@ -88,7 +88,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     }
 
     Thread EXConnReader = new Thread(new Runnable() {
-        public void run() //Этот метод будет выполняться в побочном потоке
+        public void run() 
         {
             int Interval = 1000;
             int IntervalMax = 10000;
