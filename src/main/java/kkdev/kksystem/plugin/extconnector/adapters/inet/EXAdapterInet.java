@@ -19,6 +19,7 @@ import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import kkdev.kksystem.base.classes.plugins.webkkmaster.WM_Answer;
 import static kkdev.kksystem.base.classes.plugins.webkkmaster.WM_KKMasterConsts.*;
 import kkdev.kksystem.plugin.extconnector.adapters.IEXAdapter;
+import kkdev.kksystem.plugin.extconnector.adapters.SysExtLinkStates;
 import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterConfig;
 import kkdev.kksystem.plugin.extconnector.exconnmanager.IEXConnManager;
 import org.apache.http.HttpResponse;
@@ -34,7 +35,7 @@ import org.apache.http.message.BasicNameValuePair;
  * @author sayma_000
  */
 public class EXAdapterInet implements IEXAdapter {
-
+    SysExtLinkStates LinkState;
     Deque<PluginMessage> PMStack;
     IEXConnManager ConnManager;
     int IntervalTune;
@@ -46,6 +47,7 @@ public class EXAdapterInet implements IEXAdapter {
         Configuration = Conf;
         ConnManager = Conn;
         PMStack = new ArrayDeque<>();
+        LinkState=new SysExtLinkStates();
     }
 
     @Override
@@ -71,6 +73,10 @@ public class EXAdapterInet implements IEXAdapter {
 
     @Override
     public void ReadPinCommands() {
+        //==
+        if (!LinkState.SystemInternetstate)
+            return;
+        //===
         WM_EXConn_PinData[] ForRet = GetPinData();
         //
         PluginMessage[] PlM=new PluginMessage[1];
@@ -93,11 +99,11 @@ public class EXAdapterInet implements IEXAdapter {
 
     }
 
-    public void SendPinData() {
+    private void SendPinData() {
         HttpClient client = HttpClientBuilder.create().build();
     }
 
-    public WM_EXConn_PinData[] GetPinData() {
+    private WM_EXConn_PinData[] GetPinData() {
 
         WM_Answer Ans;
         Gson gson = new Gson();
@@ -135,7 +141,7 @@ public class EXAdapterInet implements IEXAdapter {
         return null;
     }
 
-    public int PostPinData(PluginMessage[] PM) {
+    private int PostPinData(PluginMessage[] PM) {
 
         ControllerConfiguration Ret = null;
         WM_Answer Ans;
@@ -190,6 +196,11 @@ public class EXAdapterInet implements IEXAdapter {
         WM_EXConn_PinData Ret = new WM_EXConn_PinData();
         Ret.PinData = PM;
         return Ret;
+    }
+
+    @Override
+    public void ExtSysLinkStateChange(SysExtLinkStates State) {
+       LinkState=State;
     }
 
 }

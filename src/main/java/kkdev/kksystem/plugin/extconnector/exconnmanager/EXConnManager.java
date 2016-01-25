@@ -10,14 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static kkdev.kksystem.base.classes.controls.PinControlData.DEF_BTN_BACK;
-import static kkdev.kksystem.base.classes.controls.PinControlData.DEF_BTN_DOWN;
-import static kkdev.kksystem.base.classes.controls.PinControlData.DEF_BTN_ENTER;
-import static kkdev.kksystem.base.classes.controls.PinControlData.DEF_BTN_UP;
+import kkdev.kksystem.base.classes.base.PinBaseCommand;
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import kkdev.kksystem.base.classes.plugins.simple.managers.PluginManagerBase;
+import kkdev.kksystem.base.constants.PluginConsts;
 import kkdev.kksystem.plugin.extconnector.KKPlugin;
 import kkdev.kksystem.plugin.extconnector.adapters.IEXAdapter;
+import kkdev.kksystem.plugin.extconnector.adapters.SysExtLinkStates;
 import kkdev.kksystem.plugin.extconnector.adapters.inet.EXAdapterInet;
 import kkdev.kksystem.plugin.extconnector.adapters.local.EXAdapterBluetooth;
 import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterConfig;
@@ -75,6 +74,11 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     }
 
     private void SendPinToAdapter(PluginMessage Pin) {
+        if (Pin.PinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND))
+        {
+            ProcessSystemCommand(Pin);
+        }
+        
         if (Mapping.containsKey(Pin.SenderUID)) {
             for (String AD : Mapping.get(Pin.SenderUID)) {
                 Adapters.get(AD).ExecutePinCommand(Pin);
@@ -87,6 +91,29 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
         Connector.ExecutePin(PM);
     }
 
+    private void ProcessSystemCommand(PluginMessage Pin)
+    {
+        switch (Pin.PinName)
+        {
+            case PluginConsts.KK_PLUGIN_BASE_CONTROL_COMMAND:
+                PinBaseCommand PBK = (PinBaseCommand)Pin.PinData;
+                if (PBK.BaseCommand==PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_ACTIVE )
+                    AlertStateChange(new SysExtLinkStates(true,false,false));
+                else if  (PBK.BaseCommand==PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_INACTIVE)
+                    AlertStateChange(new SysExtLinkStates());
+                break;
+        }
+    }
+    
+    private void AlertStateChange(SysExtLinkStates State)
+    {
+        for (IEXAdapter A:Adapters.values())
+        {
+            A.ExtSysLinkStateChange(State);
+        }
+    }
+    
+    
     Thread EXConnReader = new Thread(new Runnable() {
         public void run() 
         {

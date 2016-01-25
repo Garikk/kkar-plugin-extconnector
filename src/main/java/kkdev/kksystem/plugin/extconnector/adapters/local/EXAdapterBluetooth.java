@@ -7,6 +7,7 @@ package kkdev.kksystem.plugin.extconnector.adapters.local;
 
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import kkdev.kksystem.plugin.extconnector.adapters.IEXAdapter;
+import kkdev.kksystem.plugin.extconnector.adapters.SysExtLinkStates;
 import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterConfig;
 
 /**
@@ -40,6 +41,11 @@ public class EXAdapterBluetooth implements IEXAdapter {
 
     @Override
     public int GetIntervalTune() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void ExtSysLinkStateChange(SysExtLinkStates State) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

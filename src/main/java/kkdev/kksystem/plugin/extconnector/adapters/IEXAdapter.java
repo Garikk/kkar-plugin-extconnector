@@ -17,4 +17,6 @@ public interface IEXAdapter {
     public  PluginMessage ExecutePinCommand(PluginMessage PP);
     public void ReadPinCommands();
     public int GetIntervalTune();
+    public void ExtSysLinkStateChange(SysExtLinkStates State);
+            
 }
