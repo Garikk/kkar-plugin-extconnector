@@ -13,4 +13,6 @@ import kkdev.kksystem.base.classes.plugins.PluginMessage;
  */
 public interface IEXConnManager {
     public void ExecPINCommand(PluginMessage PM);
+    public void SendPIN_ObjPin(String Tag,Object Data);
+    public void SendPIN_PluginMessage(String FeatureID,String PinName, Object Data);
 }

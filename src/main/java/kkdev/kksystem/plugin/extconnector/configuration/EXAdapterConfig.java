@@ -12,7 +12,7 @@ package kkdev.kksystem.plugin.extconnector.configuration;
 public class EXAdapterConfig {
     public enum EXAdapter_Types
     {
-        EXA_Bluetooth,
+        EXA_Plugin_TaggedPin_Json_KKPin,
         EXA_Internet
         
     }
@@ -21,9 +21,11 @@ public class EXAdapterConfig {
     public String AdapterName;
     public String AdapterID;
     
+    public boolean Passive;
+    
     public String Inet_ServerHost;
     public int Inet_ServerPort;
     public String Inet_ExService;
     
-    public String BT_DeviceName;
+    public String PinTag;
 }

@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kkdev.kksystem.base.classes.base.PinBaseCommand;
+import kkdev.kksystem.base.classes.base.PinBaseData;
+import kkdev.kksystem.base.classes.base.PinBaseDataTaggedObj;
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import kkdev.kksystem.base.classes.plugins.simple.managers.PluginManagerBase;
 import kkdev.kksystem.base.constants.PluginConsts;
@@ -18,7 +20,7 @@ import kkdev.kksystem.plugin.extconnector.KKPlugin;
 import kkdev.kksystem.plugin.extconnector.adapters.IEXAdapter;
 import kkdev.kksystem.plugin.extconnector.adapters.SysExtLinkStates;
 import kkdev.kksystem.plugin.extconnector.adapters.inet.EXAdapterInet;
-import kkdev.kksystem.plugin.extconnector.adapters.local.EXAdapterBluetooth;
+import kkdev.kksystem.plugin.extconnector.adapters.json_pin.EXAdapterJsonPin;
 import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterConfig;
 import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterMapping;
 import kkdev.kksystem.plugin.extconnector.configuration.PluginSettings;
@@ -56,8 +58,8 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
         for (EXAdapterConfig AD : PluginSettings.MainConfiguration.Adapters) {
             if (AD.AdapterType == EXAdapterConfig.EXAdapter_Types.EXA_Internet) {
                 Adapters.put(AD.AdapterID, new EXAdapterInet(AD, this));
-            } else if (AD.AdapterType == EXAdapterConfig.EXAdapter_Types.EXA_Bluetooth) {
-                Adapters.put(AD.AdapterID, new EXAdapterBluetooth(AD));
+            } else if (AD.AdapterType == EXAdapterConfig.EXAdapter_Types.EXA_Plugin_TaggedPin_Json_KKPin) {
+                Adapters.put(AD.AdapterID, new EXAdapterJsonPin(AD,this));
             }
         }
 
@@ -150,5 +152,21 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
             }
         }
     });
+
+    @Override
+    public void SendPIN_ObjPin(String Tag, Object Data) {
+        PinBaseDataTaggedObj ObjDat;
+        ObjDat=new PinBaseDataTaggedObj();
+        ObjDat.DataType=PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
+        ObjDat.Tag=Tag;
+        ObjDat.Value=Data;
+        
+        this.BASE_SendPluginMessage(this.CurrentFeature, PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
+    }
+
+    @Override
+    public void SendPIN_PluginMessage(String FeatureID, String PinName, Object Data) {
+       this.BASE_SendPluginMessage(FeatureID, PinName, Data);
+    }
 
 }
