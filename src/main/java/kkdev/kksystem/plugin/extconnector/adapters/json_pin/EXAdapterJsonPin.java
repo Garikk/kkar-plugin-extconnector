@@ -12,30 +12,36 @@ import kkdev.kksystem.plugin.extconnector.adapters.SysExtLinkStates;
 import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterConfig;
 import kkdev.kksystem.plugin.extconnector.exconnmanager.IEXConnManager;
 import com.google.gson.Gson;
+import static java.lang.System.out;
 import kkdev.kksystem.base.classes.base.PinBaseDataTaggedObj;
+import kkdev.kksystem.base.classes.controls.PinControlData;
+import kkdev.kksystem.base.classes.odb2.PinOdb2Command;
+import kkdev.kksystem.base.classes.odb2.PinOdb2Data;
+import kkdev.kksystem.base.constants.PluginConsts;
 
 /**
  *
  * @author sayma_000
  */
 public class EXAdapterJsonPin implements IEXAdapter {
+
     boolean Enabled;
     IEXConnManager ConnManager;
     EXAdapterConfig MyConf;
     Gson gson;
-   
-   public EXAdapterJsonPin(EXAdapterConfig Conf,IEXConnManager ConnectionManager)
-    {
-        gson=new Gson();
-        MyConf=Conf;
-        ConnectionManager=ConnManager;
+
+    public EXAdapterJsonPin(EXAdapterConfig Conf, IEXConnManager ConnectionManager) {
+        gson = new Gson();
+        MyConf = Conf;
+        ConnManager = ConnectionManager;
     }
 
     @Override
     public PluginMessage ExecutePinCommand(PluginMessage PP) {
-        if (!Enabled)
+        if (!Enabled) {
             return null;
-                
+        }
+
         ProcessPIN(PP);
         //
         return null;
@@ -43,22 +49,22 @@ public class EXAdapterJsonPin implements IEXAdapter {
 
     @Override
     public void SetActive() {
-        Enabled=true;
+        Enabled = true;
     }
 
     @Override
     public void SetInactive() {
-        Enabled=false;
+        Enabled = false;
     }
 
     @Override
     public void ReadPinCommands() {
-       //this is active adapter, not need to manual read
+        //this is active adapter, not need to manual read
     }
 
     @Override
     public int GetIntervalTune() {
-       return 0;  //this is active adapter, not need to tune reading
+        return 0;  //this is active adapter, not need to tune reading
     }
 
     @Override
@@ -66,44 +72,45 @@ public class EXAdapterJsonPin implements IEXAdapter {
         //not need (apply only for passive connections)
     }
 
-    private void ProcessPIN(PluginMessage PP)
-    {
-        if (PP.PinName==KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA)
-        {
+    private void ProcessPIN(PluginMessage PP) {
+        if (PP.PinName == KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA) {
             ProcessTaggedPin(PP);
-        }
-        else
-        {
+        } else {
             ProcessRegularPin(PP);
         }
-    
+
     }
-    
-    private void ProcessTaggedPin(PluginMessage PP)
-    {
-          PinBaseDataTaggedObj ObjDat;
-          
-          ObjDat=(PinBaseDataTaggedObj)PP.PinData;
-        
-          if (ObjDat.Tag!=MyConf.PinTag)
-              return;
-          
+
+    private void ProcessTaggedPin(PluginMessage PP) {
+        PinBaseDataTaggedObj ObjDat;
+
+        ObjDat = (PinBaseDataTaggedObj) PP.PinData;
+
+        if (!ObjDat.Tag.equals(MyConf.PinTag)) {
+            return;
+        }
         PluginMessage PM;
-  
-        PM = (PluginMessage)gson.fromJson((String)ObjDat.Value, PluginMessage.class);
-        ConnManager.SendPIN_PluginMessage(PM.FeatureID,PM.PinName, PM.PinData);
-               
-        
+        PM = (PluginMessage) gson.fromJson((String) ObjDat.Value, PluginMessage.class);
+        if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_ODB2_COMMAND)) {
+            PM.PinData = gson.fromJson((String) PM.PinData, PinOdb2Command.class);
+        } else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_ODB2_DATA)) {
+            PM.PinData =  gson.fromJson((String) PM.PinData, PinOdb2Data.class);
+        } else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_CONTROL_COMMAND)) {
+            PM.PinData =  gson.fromJson((String) PM.PinData, PinControlData.class);
+        }else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_CONTROL_DATA)) {
+            PM.PinData =  gson.fromJson((String) PM.PinData, PinControlData.class);
+        }
+
+        ConnManager.SendPIN_PluginMessage(PM.FeatureID, PM.PinName, PM.PinData);
     }
-    
-    private void ProcessRegularPin(PluginMessage PP)
-    {
+
+    private void ProcessRegularPin(PluginMessage PP) {
         String Json;
         Json = gson.toJson(PP);
         //
-        PluginMessage PM=new PluginMessage();
-        PM.PinName=KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA;
-        PM.PinData=PP;
+        PluginMessage PM = new PluginMessage();
+        PM.PinName = KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA;
+        PM.PinData = PP;
         //
         ConnManager.ExecPINCommand(PM);
     }

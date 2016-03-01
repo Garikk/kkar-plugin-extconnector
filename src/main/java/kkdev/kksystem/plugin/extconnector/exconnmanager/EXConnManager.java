@@ -5,6 +5,7 @@
  */
 package kkdev.kksystem.plugin.extconnector.exconnmanager;
 
+import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +73,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     }
 
     public void ReceivePin(PluginMessage Pin) {
+         
         SendPinToAdapter(Pin);
     }
 
