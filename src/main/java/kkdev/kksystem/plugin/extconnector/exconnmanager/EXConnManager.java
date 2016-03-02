@@ -37,8 +37,8 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
 
     public void Init(KKPlugin Conn) {
         Connector = Conn;
-        Mapping=new HashMap<>();
-        Adapters=new HashMap<>();
+        Mapping = new HashMap<>();
+        Adapters = new HashMap<>();
 
         PluginSettings.InitConfig(Conn.GlobalConfID, Conn.PluginInfo.GetPluginInfo().PluginUUID);
         //
@@ -60,7 +60,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
             if (AD.AdapterType == EXAdapterConfig.EXAdapter_Types.EXA_Internet) {
                 Adapters.put(AD.AdapterID, new EXAdapterInet(AD, this));
             } else if (AD.AdapterType == EXAdapterConfig.EXAdapter_Types.EXA_Plugin_TaggedPin_Json_KKPin) {
-                Adapters.put(AD.AdapterID, new EXAdapterJsonPin(AD,this));
+                Adapters.put(AD.AdapterID, new EXAdapterJsonPin(AD, this));
             }
         }
 
@@ -73,18 +73,17 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     }
 
     public void ReceivePin(PluginMessage Pin) {
-         
         SendPinToAdapter(Pin);
     }
 
     private void SendPinToAdapter(PluginMessage Pin) {
-        if (Pin.PinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND))
-        {
+        if (Pin.PinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND)) {
             ProcessSystemCommand(Pin);
         }
-        
+        out.println("[EXA] Receive PIN to Adapter " + Pin.SenderUID + " " + Pin.PinName);
         if (Mapping.containsKey(Pin.SenderUID)) {
             for (String AD : Mapping.get(Pin.SenderUID)) {
+                out.println("[EXA] Send PIN to Adapter " + AD);
                 Adapters.get(AD).ExecutePinCommand(Pin);
             }
         }
@@ -95,32 +94,27 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
         Connector.ExecutePin(PM);
     }
 
-    private void ProcessSystemCommand(PluginMessage Pin)
-    {
-        switch (Pin.PinName)
-        {
+    private void ProcessSystemCommand(PluginMessage Pin) {
+        switch (Pin.PinName) {
             case PluginConsts.KK_PLUGIN_BASE_CONTROL_COMMAND:
-                PinBaseCommand PBK = (PinBaseCommand)Pin.PinData;
-                if (PBK.BaseCommand==PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_ACTIVE )
-                    AlertStateChange(new SysExtLinkStates(true,false,false));
-                else if  (PBK.BaseCommand==PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_INACTIVE)
+                PinBaseCommand PBK = (PinBaseCommand) Pin.PinData;
+                if (PBK.BaseCommand == PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_ACTIVE) {
+                    AlertStateChange(new SysExtLinkStates(true, false, false));
+                } else if (PBK.BaseCommand == PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_INACTIVE) {
                     AlertStateChange(new SysExtLinkStates());
+                }
                 break;
         }
     }
-    
-    private void AlertStateChange(SysExtLinkStates State)
-    {
-        for (IEXAdapter A:Adapters.values())
-        {
+
+    private void AlertStateChange(SysExtLinkStates State) {
+        for (IEXAdapter A : Adapters.values()) {
             A.ExtSysLinkStateChange(State);
         }
     }
-    
-    
+
     Thread EXConnReader = new Thread(new Runnable() {
-        public void run() 
-        {
+        public void run() {
             int Interval = 1000;
             int IntervalMax = 10000;
             int IntervalMin = 500;
@@ -158,17 +152,17 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     @Override
     public void SendPIN_ObjPin(String Tag, Object Data) {
         PinBaseDataTaggedObj ObjDat;
-        ObjDat=new PinBaseDataTaggedObj();
-        ObjDat.DataType=PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
-        ObjDat.Tag=Tag;
-        ObjDat.Value=Data;
-        
+        ObjDat = new PinBaseDataTaggedObj();
+        ObjDat.DataType = PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
+        ObjDat.Tag = Tag;
+        ObjDat.Value = Data;
+
         this.BASE_SendPluginMessage(this.CurrentFeature, PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
     }
 
     @Override
     public void SendPIN_PluginMessage(String FeatureID, String PinName, Object Data) {
-       this.BASE_SendPluginMessage(FeatureID, PinName, Data);
+        this.BASE_SendPluginMessage(FeatureID, PinName, Data);
     }
 
 }

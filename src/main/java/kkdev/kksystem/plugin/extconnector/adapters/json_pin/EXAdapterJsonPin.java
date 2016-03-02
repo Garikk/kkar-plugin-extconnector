@@ -13,11 +13,13 @@ import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterConfig;
 import kkdev.kksystem.plugin.extconnector.exconnmanager.IEXConnManager;
 import com.google.gson.Gson;
 import static java.lang.System.out;
+import kkdev.kksystem.base.classes.base.PinBaseData;
 import kkdev.kksystem.base.classes.base.PinBaseDataTaggedObj;
 import kkdev.kksystem.base.classes.controls.PinControlData;
 import kkdev.kksystem.base.classes.odb2.PinOdb2Command;
 import kkdev.kksystem.base.classes.odb2.PinOdb2Data;
 import kkdev.kksystem.base.constants.PluginConsts;
+import static kkdev.kksystem.base.constants.SystemConsts.KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
 
 /**
  *
@@ -105,14 +107,16 @@ public class EXAdapterJsonPin implements IEXAdapter {
     }
 
     private void ProcessRegularPin(PluginMessage PP) {
-        String Json;
-        Json = gson.toJson(PP);
+        PinBaseDataTaggedObj Dat;
+        Dat=new PinBaseDataTaggedObj();
+        PP.PinData=gson.toJson(PP.PinData);
+        Dat.Value=gson.toJson(PP);
+        Dat.FeatureID=KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
+        Dat.DataType=PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
+        Dat.Tag=MyConf.PinTag;
+        
         //
-        PluginMessage PM = new PluginMessage();
-        PM.PinName = KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA;
-        PM.PinData = PP;
-        //
-        ConnManager.ExecPINCommand(PM);
+        ConnManager.SendPIN_PluginMessage(KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID,KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA,Dat);
     }
 
 }
