@@ -5,6 +5,7 @@
  */
 package kkdev.kksystem.plugin.extconnector.configuration;
 
+import kkdev.kksystem.base.constants.PluginConsts;
 import static kkdev.kksystem.base.constants.PluginConsts.KK_PLUGIN_BASE_PLUGIN_BLUETOOTH_UUID;
 import static kkdev.kksystem.base.constants.PluginConsts.KK_PLUGIN_BASE_PLUGIN_HID;
 import static kkdev.kksystem.base.constants.PluginConsts.KK_PLUGIN_BASE_PLUGIN_LEDDISPLAY_UUID;
@@ -41,7 +42,7 @@ public abstract class kk_DefaultConfig {
         //
         
         
-        DefConfig.PluginMapping=new EXAdapterMapping[4];
+        DefConfig.PluginMapping=new EXAdapterMapping[5];
         
         EXAdapterMapping AM=new EXAdapterMapping();
         AM.SourcePlugin=KK_PLUGIN_BASE_PLUGIN_LEDDISPLAY_UUID;
@@ -62,10 +63,16 @@ public abstract class kk_DefaultConfig {
         DefConfig.PluginMapping[2]=AM;
         
         AM=new EXAdapterMapping();
-        AM.SourcePlugin=KK_PLUGIN_BASE_PLUGIN_HID;
+        AM.SourcePlugin=PluginConsts.KK_PLUGIN_BASE_PLUGIN_HID_UUID;
         AM.TargetAdapter="BT_EXCONNECTOR";
         
         DefConfig.PluginMapping[3]=AM;
+        
+        AM=new EXAdapterMapping();
+        AM.SourcePlugin=PluginConsts.KK_PLUGIN_BASE_PLUGIN_DATADISPLAY_UUID;
+        AM.TargetAdapter="BT_EXCONNECTOR";
+        
+        DefConfig.PluginMapping[4]=AM;
         return DefConfig;
     }
 

@@ -16,6 +16,7 @@ import static java.lang.System.out;
 import kkdev.kksystem.base.classes.base.PinBaseData;
 import kkdev.kksystem.base.classes.base.PinBaseDataTaggedObj;
 import kkdev.kksystem.base.classes.controls.PinControlData;
+import kkdev.kksystem.base.classes.display.PinLedData;
 import kkdev.kksystem.base.classes.odb2.PinOdb2Command;
 import kkdev.kksystem.base.classes.odb2.PinOdb2Data;
 import kkdev.kksystem.base.constants.PluginConsts;
@@ -75,7 +76,7 @@ public class EXAdapterJsonPin implements IEXAdapter {
     }
 
     private void ProcessPIN(PluginMessage PP) {
-        if (PP.PinName == KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA) {
+        if (PP.PinName.equals(KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA)) {
             ProcessTaggedPin(PP);
         } else {
             ProcessRegularPin(PP);
@@ -101,6 +102,8 @@ public class EXAdapterJsonPin implements IEXAdapter {
             PM.PinData =  gson.fromJson((String) PM.PinData, PinControlData.class);
         }else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_CONTROL_DATA)) {
             PM.PinData =  gson.fromJson((String) PM.PinData, PinControlData.class);
+        }else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_LED_DATA)) {
+            PM.PinData =  gson.fromJson((String) PM.PinData, PinLedData.class);
         }
 
         ConnManager.SendPIN_PluginMessage(PM.FeatureID, PM.PinName, PM.PinData);
