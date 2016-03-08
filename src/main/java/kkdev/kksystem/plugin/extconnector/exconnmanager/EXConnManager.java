@@ -80,10 +80,10 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
         if (Pin.PinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND)) {
             ProcessSystemCommand(Pin);
         }
-        out.println("[EXA] Receive PIN to Adapter " + Pin.SenderUID + " " + Pin.PinName);
+      //  out.println("[EXA] Receive PIN to Adapter " + Pin.SenderUID + " " + Pin.PinName);
         if (Mapping.containsKey(Pin.SenderUID)) {
             for (String AD : Mapping.get(Pin.SenderUID)) {
-                out.println("[EXA] Send PIN to Adapter " + AD);
+                out.println("[EXA] Send PIN "+Pin.PinName+" to Adapter " + AD);
                 Adapters.get(AD).ExecutePinCommand(Pin);
             }
         }

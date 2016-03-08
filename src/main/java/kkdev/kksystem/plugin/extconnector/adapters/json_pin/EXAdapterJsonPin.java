@@ -112,8 +112,10 @@ public class EXAdapterJsonPin implements IEXAdapter {
     private void ProcessRegularPin(PluginMessage PP) {
         PinBaseDataTaggedObj Dat;
         Dat=new PinBaseDataTaggedObj();
+       // out.println("[EXA] Dat "+ PP.PinName + " " + PP.PinData);
         PP.PinData=gson.toJson(PP.PinData);
         Dat.Value=gson.toJson(PP);
+
         Dat.FeatureID=KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
         Dat.DataType=PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
         Dat.Tag=MyConf.PinTag;
