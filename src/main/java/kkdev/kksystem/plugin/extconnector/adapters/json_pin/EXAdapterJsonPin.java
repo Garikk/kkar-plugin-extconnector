@@ -13,6 +13,7 @@ import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterConfig;
 import kkdev.kksystem.plugin.extconnector.exconnmanager.IEXConnManager;
 import com.google.gson.Gson;
 import static java.lang.System.out;
+import kkdev.kksystem.base.classes.base.PinBaseCommand;
 import kkdev.kksystem.base.classes.base.PinBaseData;
 import kkdev.kksystem.base.classes.base.PinBaseDataTaggedObj;
 import kkdev.kksystem.base.classes.controls.PinControlData;
@@ -104,7 +105,11 @@ public class EXAdapterJsonPin implements IEXAdapter {
             PM.PinData =  gson.fromJson((String) PM.PinData, PinControlData.class);
         }else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_LED_DATA)) {
             PM.PinData =  gson.fromJson((String) PM.PinData, PinLedData.class);
+        }else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND))
+        {
+            PM.PinData=gson.fromJson((String)PM.PinData, PinBaseCommand.class);
         }
+        
 
         ConnManager.SendPIN_PluginMessage(PM.FeatureID, PM.PinName, PM.PinData);
     }
@@ -112,7 +117,6 @@ public class EXAdapterJsonPin implements IEXAdapter {
     private void ProcessRegularPin(PluginMessage PP) {
         PinBaseDataTaggedObj Dat;
         Dat=new PinBaseDataTaggedObj();
-       // out.println("[EXA] Dat "+ PP.PinName + " " + PP.PinData);
         PP.PinData=gson.toJson(PP.PinData);
         Dat.Value=gson.toJson(PP);
 
