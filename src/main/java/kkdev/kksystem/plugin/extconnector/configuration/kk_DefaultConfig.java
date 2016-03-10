@@ -42,7 +42,7 @@ public abstract class kk_DefaultConfig {
         //
         
         
-        DefConfig.PluginMapping=new EXAdapterMapping[5];
+        DefConfig.PluginMapping=new EXAdapterMapping[6];
         
         EXAdapterMapping AM=new EXAdapterMapping();
         AM.SourcePlugin=KK_PLUGIN_BASE_PLUGIN_LEDDISPLAY_UUID;
@@ -73,6 +73,12 @@ public abstract class kk_DefaultConfig {
         AM.TargetAdapter="BT_EXCONNECTOR";
         
         DefConfig.PluginMapping[4]=AM;
+        
+        AM=new EXAdapterMapping();
+        AM.SourcePlugin=PluginConsts.KK_PLUGIN_BASE_PLUGIN_UUID;
+        AM.TargetAdapter="BT_EXCONNECTOR";
+        
+        DefConfig.PluginMapping[5]=AM;
         return DefConfig;
     }
 
