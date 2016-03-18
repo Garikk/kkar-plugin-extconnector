@@ -119,7 +119,7 @@ public class EXAdapterInet implements IEXAdapter {
 
             Ans = gson.fromJson(rd, WM_Answer.class);
 
-            System.out.println("[EXA][DBG] " + Configuration.Inet_ServerHost + ":" + Configuration.Inet_ServerPort + "/" + Configuration.Inet_ExService);
+           // System.out.println("[EXA][DBG] " + Configuration.Inet_ServerHost + ":" + Configuration.Inet_ServerPort + "/" + Configuration.Inet_ExService);
             if (Ans.AnswerState == 0) {
                 WM_EXConn_PinData[] Ret = gson.fromJson(Ans.JsonData, WM_EXConn_PinData[].class);
                 if (Ret.length > 0) {
@@ -128,10 +128,10 @@ public class EXAdapterInet implements IEXAdapter {
                     IntervalTune = 0;
                 }
 
-                System.out.println("[EXA][DBG] OK");
+                //System.out.println("[EXA][DBG] OK");
                 return Ret;
             } else {
-                System.out.println("[EXA][DBG] Null");
+               // System.out.println("[EXA][DBG] Null");
                 return null;
             }
 

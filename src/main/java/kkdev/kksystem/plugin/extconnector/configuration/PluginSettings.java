@@ -26,7 +26,7 @@ public abstract class PluginSettings {
         Settings=new SettingsManager(HID_CONF,EXConfig.class);
         
         
-        System.out.println("[EXA][CONFIG] Load configuration");
+       // System.out.println("[EXA][CONFIG] Load configuration");
         MainConfiguration=(EXConfig)Settings.LoadConfig();
 
         if (MainConfiguration == null) {
