@@ -77,6 +77,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     }
 
     private void SendPinToAdapter(PluginMessage Pin) {
+        
         if (Pin.PinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND)) {
             ProcessSystemCommand(Pin);
         }
