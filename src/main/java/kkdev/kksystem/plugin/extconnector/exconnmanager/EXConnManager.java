@@ -17,6 +17,8 @@ import kkdev.kksystem.base.classes.base.PinBaseDataTaggedObj;
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import kkdev.kksystem.base.classes.plugins.simple.managers.PluginManagerBase;
 import kkdev.kksystem.base.constants.PluginConsts;
+import kkdev.kksystem.base.constants.SystemConsts;
+import static kkdev.kksystem.base.constants.SystemConsts.KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
 import kkdev.kksystem.plugin.extconnector.KKPlugin;
 import kkdev.kksystem.plugin.extconnector.adapters.IEXAdapter;
 import kkdev.kksystem.plugin.extconnector.adapters.SysExtLinkStates;
@@ -39,7 +41,9 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
         Connector = Conn;
         Mapping = new HashMap<>();
         Adapters = new HashMap<>();
-
+        //
+        CurrentFeature.put(SystemConsts.KK_BASE_UICONTEXT_DEFAULT, KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID);
+        //
         PluginSettings.InitConfig(Conn.GlobalConfID, Conn.PluginInfo.GetPluginInfo().PluginUUID);
         //
         ConfigAndInitHW();
@@ -158,7 +162,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
         ObjDat.Tag = Tag;
         ObjDat.Value = Data;
 
-        this.BASE_SendPluginMessage(this.CurrentFeature, PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
+        this.BASE_SendPluginMessage(this.CurrentFeature.get(SystemConsts.KK_BASE_UICONTEXT_DEFAULT), PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
     }
 
     @Override
