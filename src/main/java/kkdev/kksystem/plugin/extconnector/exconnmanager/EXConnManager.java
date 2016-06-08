@@ -38,13 +38,13 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     HashMap<String, List<String>> Mapping; // Plugin - Adapter
 
     public void Init(KKPlugin Conn) {
-        Connector = Conn;
+        connector = Conn;
         Mapping = new HashMap<>();
         Adapters = new HashMap<>();
         //
-        CurrentFeature.put(SystemConsts.KK_BASE_UICONTEXT_DEFAULT, KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID);
+        currentFeature.put(SystemConsts.KK_BASE_UICONTEXT_DEFAULT, KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID);
         //
-        PluginSettings.InitConfig(Conn.GlobalConfID, Conn.PluginInfo.GetPluginInfo().PluginUUID);
+        PluginSettings.InitConfig(Conn.globalConfID, Conn.pluginInfo.getPluginInfo().PluginUUID);
         //
         ConfigAndInitHW();
         //
@@ -96,16 +96,16 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
 
     @Override
     public void ExecPINCommand(PluginMessage PM) {
-        Connector.ExecutePin(PM);
+        connector.executePin(PM);
     }
 
     private void ProcessSystemCommand(PluginMessage Pin) {
         switch (Pin.PinName) {
             case PluginConsts.KK_PLUGIN_BASE_CONTROL_COMMAND:
                 PinBaseCommand PBK = (PinBaseCommand) Pin.PinData;
-                if (PBK.BaseCommand == PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_ACTIVE) {
+                if (PBK.baseCommand == PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_ACTIVE) {
                     AlertStateChange(new SysExtLinkStates(true, false, false));
-                } else if (PBK.BaseCommand == PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_INACTIVE) {
+                } else if (PBK.baseCommand == PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_INACTIVE) {
                     AlertStateChange(new SysExtLinkStates());
                 }
                 break;
@@ -158,11 +158,11 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     public void SendPIN_ObjPin(String Tag, Object Data) {
         PinBaseDataTaggedObj ObjDat;
         ObjDat = new PinBaseDataTaggedObj();
-        ObjDat.DataType = PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
-        ObjDat.Tag = Tag;
-        ObjDat.Value = Data;
+        ObjDat.dataType = PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
+        ObjDat.tag = Tag;
+        ObjDat.value = Data;
 
-        this.BASE_SendPluginMessage(this.CurrentFeature.get(SystemConsts.KK_BASE_UICONTEXT_DEFAULT), PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
+        this.BASE_SendPluginMessage(this.currentFeature.get(SystemConsts.KK_BASE_UICONTEXT_DEFAULT), PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
     }
 
     @Override

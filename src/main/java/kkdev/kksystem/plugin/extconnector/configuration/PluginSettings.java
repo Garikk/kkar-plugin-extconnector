@@ -27,12 +27,12 @@ public abstract class PluginSettings {
         
         
        // System.out.println("[EXA][CONFIG] Load configuration");
-        MainConfiguration=(EXConfig)Settings.LoadConfig();
+        MainConfiguration=(EXConfig)Settings.loadConfig();
 
         if (MainConfiguration == null) {
             System.out.println("[EXA][CONFIG] Error Load configuration, try create default config");
-            Settings.SaveConfig(kk_DefaultConfig.MakeDefaultConfig());
-            MainConfiguration=(EXConfig)Settings.LoadConfig();
+            Settings.saveConfig(kk_DefaultConfig.MakeDefaultConfig());
+            MainConfiguration=(EXConfig)Settings.loadConfig();
         }
         if (MainConfiguration == null) {
             System.out.println("[EXA][CONFIG] Load configuration, fatal");

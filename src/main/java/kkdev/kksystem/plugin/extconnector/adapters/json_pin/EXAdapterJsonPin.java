@@ -90,11 +90,11 @@ public class EXAdapterJsonPin implements IEXAdapter {
 
         ObjDat = (PinBaseDataTaggedObj) PP.PinData;
 
-        if (!ObjDat.Tag.equals(MyConf.PinTag)) {
+        if (!ObjDat.tag.equals(MyConf.PinTag)) {
             return;
         }
         PluginMessage PM;
-        PM = (PluginMessage) gson.fromJson((String) ObjDat.Value, PluginMessage.class);
+        PM = (PluginMessage) gson.fromJson((String) ObjDat.value, PluginMessage.class);
         if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_ODB2_COMMAND)) {
             PM.PinData = gson.fromJson((String) PM.PinData, PinOdb2Command.class);
         } else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_ODB2_DATA)) {
@@ -118,11 +118,11 @@ public class EXAdapterJsonPin implements IEXAdapter {
         PinBaseDataTaggedObj Dat;
         Dat=new PinBaseDataTaggedObj();
         PP.PinData=gson.toJson(PP.PinData);
-        Dat.Value=gson.toJson(PP);
+        Dat.value=gson.toJson(PP);
 
-        Dat.FeatureID=KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
-        Dat.DataType=PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
-        Dat.Tag=MyConf.PinTag;
+        Dat.featureID=KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
+        Dat.dataType=PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
+        Dat.tag=MyConf.PinTag;
         
         //
         ConnManager.SendPIN_PluginMessage(KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID,KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA,Dat);
