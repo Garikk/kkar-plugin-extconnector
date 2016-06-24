@@ -12,14 +12,13 @@ import kkdev.kksystem.plugin.extconnector.adapters.SysExtLinkStates;
 import kkdev.kksystem.plugin.extconnector.configuration.EXAdapterConfig;
 import kkdev.kksystem.plugin.extconnector.exconnmanager.IEXConnManager;
 import com.google.gson.Gson;
-import static java.lang.System.out;
-import kkdev.kksystem.base.classes.base.PinBaseCommand;
-import kkdev.kksystem.base.classes.base.PinBaseData;
-import kkdev.kksystem.base.classes.base.PinBaseDataTaggedObj;
-import kkdev.kksystem.base.classes.controls.PinControlData;
-import kkdev.kksystem.base.classes.display.PinLedData;
-import kkdev.kksystem.base.classes.odb2.PinOdb2Command;
-import kkdev.kksystem.base.classes.odb2.PinOdb2Data;
+import kkdev.kksystem.base.classes.base.PinData;
+import kkdev.kksystem.base.classes.base.PinDataTaggedObj;
+import kkdev.kksystem.base.classes.base.PinDataTaggedString;
+import kkdev.kksystem.base.classes.base.PluginMessageData;
+import kkdev.kksystem.base.classes.controls.PinDataControl;
+import kkdev.kksystem.base.classes.display.PinDataLed;
+import kkdev.kksystem.base.classes.odb2.PinDataOdb2;
 import kkdev.kksystem.base.constants.PluginConsts;
 import static kkdev.kksystem.base.constants.SystemConsts.KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
 
@@ -77,51 +76,49 @@ public class EXAdapterJsonPin implements IEXAdapter {
     }
 
     private void ProcessPIN(PluginMessage PP) {
-        if (PP.PinName.equals(KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA)) {
-            ProcessTaggedPin(PP);
+        if (PP.pinName.equals(KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA)) {
+            ProcessTaggedPin((PluginMessageData)PP);
         } else {
             ProcessRegularPin(PP);
         }
 
     }
 
-    private void ProcessTaggedPin(PluginMessage PP) {
-        PinBaseDataTaggedObj ObjDat;
+    private void ProcessTaggedPin(PluginMessageData PP) {
+        PinDataTaggedObj ObjDat;
 
-        ObjDat = (PinBaseDataTaggedObj) PP.PinData;
+        ObjDat = (PinDataTaggedObj) PP.getPinData();
 
         if (!ObjDat.tag.equals(MyConf.PinTag)) {
             return;
         }
         PluginMessage PM;
         PM = (PluginMessage) gson.fromJson((String) ObjDat.value, PluginMessage.class);
-        if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_ODB2_COMMAND)) {
-            PM.PinData = gson.fromJson((String) PM.PinData, PinOdb2Command.class);
-        } else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_ODB2_DATA)) {
-            PM.PinData =  gson.fromJson((String) PM.PinData, PinOdb2Data.class);
-        } else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_CONTROL_COMMAND)) {
-            PM.PinData =  gson.fromJson((String) PM.PinData, PinControlData.class);
-        }else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_CONTROL_DATA)) {
-            PM.PinData =  gson.fromJson((String) PM.PinData, PinControlData.class);
-        }else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_LED_DATA)) {
-            PM.PinData =  gson.fromJson((String) PM.PinData, PinLedData.class);
-        }else if (PM.PinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND))
+        if (PM.pinName.equals(PluginConsts.KK_PLUGIN_BASE_ODB2_COMMAND)) {
+            PM.setPinData(gson.fromJson((String) PM.getPinData(), PinDataOdb2.class));
+        } else if (PM.pinName.equals(PluginConsts.KK_PLUGIN_BASE_ODB2_DATA)) {
+            PM.setPinData(gson.fromJson((String) PM.getPinData(), PinDataOdb2.class));
+        } else if (PM.pinName.equals(PluginConsts.KK_PLUGIN_BASE_CONTROL_COMMAND)) {
+            PM.setPinData(gson.fromJson((String) PM.getPinData(), PinDataControl.class));
+        }else if (PM.pinName.equals(PluginConsts.KK_PLUGIN_BASE_CONTROL_DATA)) {
+            PM.setPinData(gson.fromJson((String) PM.getPinData(), PinDataControl.class));
+        }else if (PM.pinName.equals(PluginConsts.KK_PLUGIN_BASE_LED_DATA)) {
+            PM.setPinData(gson.fromJson((String) PM.getPinData(), PinDataLed.class));
+        }else if (PM.pinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND))
         {
-            PM.PinData=gson.fromJson((String)PM.PinData, PinBaseCommand.class);
+            PM.setPinData(gson.fromJson((String)PM.getPinData(), PinData.class));
         }
         
 
-        ConnManager.SendPIN_PluginMessage(PM.FeatureID, PM.PinName, PM.PinData);
+        ConnManager.SendPIN_PluginMessage(PM.FeatureID, PM.pinName, PM.getPinData());
     }
 
     private void ProcessRegularPin(PluginMessage PP) {
-        PinBaseDataTaggedObj Dat;
-        Dat=new PinBaseDataTaggedObj();
-        PP.PinData=gson.toJson(PP.PinData);
+        PinDataTaggedString Dat;
+        Dat=new PinDataTaggedString();
         Dat.value=gson.toJson(PP);
 
         Dat.featureID=KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
-        Dat.dataType=PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
         Dat.tag=MyConf.PinTag;
         
         //

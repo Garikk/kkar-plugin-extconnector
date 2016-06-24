@@ -5,15 +5,14 @@
  */
 package kkdev.kksystem.plugin.extconnector.exconnmanager;
 
-import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kkdev.kksystem.base.classes.base.PinBaseCommand;
-import kkdev.kksystem.base.classes.base.PinBaseData;
-import kkdev.kksystem.base.classes.base.PinBaseDataTaggedObj;
+import kkdev.kksystem.base.classes.base.PinData;
+import kkdev.kksystem.base.classes.base.PinDataTaggedObj;
+import kkdev.kksystem.base.classes.notify.PinDataNotifySystemState;
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import kkdev.kksystem.base.classes.plugins.simple.managers.PluginManagerBase;
 import kkdev.kksystem.base.constants.PluginConsts;
@@ -82,7 +81,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
 
     private void SendPinToAdapter(PluginMessage Pin) {
         
-        if (Pin.PinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND)) {
+        if (Pin.pinName.equals(PluginConsts.KK_PLUGIN_BASE_PIN_COMMAND)) {
             ProcessSystemCommand(Pin);
         }
         //out.println("[EXA] Receive PIN to Adapter " + Pin.SenderUID + " " + Pin.PinName);
@@ -100,12 +99,12 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     }
 
     private void ProcessSystemCommand(PluginMessage Pin) {
-        switch (Pin.PinName) {
+        switch (Pin.pinName) {
             case PluginConsts.KK_PLUGIN_BASE_CONTROL_COMMAND:
-                PinBaseCommand PBK = (PinBaseCommand) Pin.PinData;
-                if (PBK.baseCommand == PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_ACTIVE) {
+                PinDataNotifySystemState PBK = (PinDataNotifySystemState) Pin.getPinData();
+                if (PBK.systemState==PinDataNotifySystemState.SystemStateInfo.INERNET_ACTIVE) {
                     AlertStateChange(new SysExtLinkStates(true, false, false));
-                } else if (PBK.baseCommand == PinBaseCommand.BASE_COMMAND_TYPE.INTERNET_STATE_INACTIVE) {
+                } else if (PBK.systemState==PinDataNotifySystemState.SystemStateInfo.INERNET_ACTIVE) {
                     AlertStateChange(new SysExtLinkStates());
                 }
                 break;
@@ -156,18 +155,31 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
 
     @Override
     public void SendPIN_ObjPin(String Tag, Object Data) {
-        PinBaseDataTaggedObj ObjDat;
-        ObjDat = new PinBaseDataTaggedObj();
-        ObjDat.dataType = PinBaseData.BASE_DATA_TYPE.TAGGED_OBJ;
-        ObjDat.tag = Tag;
-        ObjDat.value = Data;
-
-        this.BASE_SendPluginMessage(this.currentFeature.get(SystemConsts.KK_BASE_UICONTEXT_DEFAULT), PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
+           SendPIN_ObjPin(Tag,(PinData)Data);      
     }
 
     @Override
-    public void SendPIN_PluginMessage(String FeatureID, String PinName, Object Data) {
-        this.BASE_SendPluginMessage(FeatureID, PinName, Data);
+    public void SendPIN_PluginMessage(String FeatureID, String PinName, PinData Data) {
+        this.BASE_SendPluginMessage(FeatureID,SystemConsts.KK_BASE_UICONTEXT_DEFAULT, PinName, Data);
     }
+        @Override
+    public void SendPIN_PluginMessage(String FeatureID, String PinName, Object Data) {
+         this.BASE_SendPluginMessage(FeatureID,SystemConsts.KK_BASE_UICONTEXT_DEFAULT, PinName, (PinData)Data);
+    }
+
+    @Override
+    public void SendPIN_ObjPin(String Tag, PinData Data) {
+
+       
+         PinDataTaggedObj ObjDat;
+        ObjDat = new PinDataTaggedObj();
+        ObjDat.tag = Tag;
+        ObjDat.value = Data;
+
+        this.BASE_SendPluginMessage(this.currentFeature.get(SystemConsts.KK_BASE_UICONTEXT_DEFAULT),SystemConsts.KK_BASE_UICONTEXT_DEFAULT, PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
+
+    }
+
+
 
 }
