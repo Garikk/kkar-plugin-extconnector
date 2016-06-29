@@ -37,7 +37,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
     HashMap<String, List<String>> Mapping; // Plugin - Adapter
 
     public void Init(KKPlugin Conn) {
-        connector = Conn;
+        setPluginConnector(Conn);
         Mapping = new HashMap<>();
         Adapters = new HashMap<>();
         //
@@ -95,7 +95,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
 
     @Override
     public void ExecPINCommand(PluginMessage PM) {
-        connector.executePin(PM);
+        getPluginConnector().executePin(PM);
     }
 
     private void ProcessSystemCommand(PluginMessage Pin) {
