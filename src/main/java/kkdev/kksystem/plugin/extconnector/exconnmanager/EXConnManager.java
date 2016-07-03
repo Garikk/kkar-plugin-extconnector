@@ -8,6 +8,7 @@ package kkdev.kksystem.plugin.extconnector.exconnmanager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kkdev.kksystem.base.classes.base.PinData;
@@ -158,12 +159,17 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
            SendPIN_ObjPin(Tag,(PinData)Data);      
     }
 
-    @Override
+        @Override
     public void SendPIN_PluginMessage(String FeatureID, String PinName, PinData Data) {
+       this.BASE_SendPluginMessage(FeatureID,SystemConsts.KK_BASE_UICONTEXT_DEFAULT, PinName, Data);
+    }
+
+    @Override
+    public void SendPIN_PluginMessage(Set<String> FeatureID, String PinName, PinData Data) {
         this.BASE_SendPluginMessage(FeatureID,SystemConsts.KK_BASE_UICONTEXT_DEFAULT, PinName, Data);
     }
         @Override
-    public void SendPIN_PluginMessage(String FeatureID, String PinName, Object Data) {
+    public void SendPIN_PluginMessage(Set<String> FeatureID, String PinName, Object Data) {
          this.BASE_SendPluginMessage(FeatureID,SystemConsts.KK_BASE_UICONTEXT_DEFAULT, PinName, (PinData)Data);
     }
 
@@ -179,6 +185,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
         this.BASE_SendPluginMessage(this.currentFeature.get(SystemConsts.KK_BASE_UICONTEXT_DEFAULT),SystemConsts.KK_BASE_UICONTEXT_DEFAULT, PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA, ObjDat);
 
     }
+
 
 
 

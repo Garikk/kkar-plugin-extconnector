@@ -5,6 +5,7 @@
  */
 package kkdev.kksystem.plugin.extconnector.exconnmanager;
 
+import java.util.Set;
 import kkdev.kksystem.base.classes.base.PinData;
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 
@@ -17,5 +18,6 @@ public interface IEXConnManager {
     public void SendPIN_ObjPin(String Tag,PinData Data);
     public void SendPIN_ObjPin(String Tag,Object Data);
     public void SendPIN_PluginMessage(String FeatureID,String PinName, PinData Data);
-    public void SendPIN_PluginMessage(String FeatureID,String PinName, Object Data);
+    public void SendPIN_PluginMessage(Set<String> FeatureID,String PinName, PinData Data);
+    public void SendPIN_PluginMessage(Set<String> FeatureID,String PinName, Object Data);
 }

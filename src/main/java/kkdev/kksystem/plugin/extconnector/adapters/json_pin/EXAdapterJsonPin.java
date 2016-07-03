@@ -118,7 +118,7 @@ public class EXAdapterJsonPin implements IEXAdapter {
         Dat=new PinDataTaggedString();
         Dat.value=gson.toJson(PP);
 
-        Dat.featureID=KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID;
+        Dat.featureID.add(KK_BASE_FEATURES_SYSTEM_MULTIFEATURE_UID);
         Dat.tag=MyConf.PinTag;
         
         //
