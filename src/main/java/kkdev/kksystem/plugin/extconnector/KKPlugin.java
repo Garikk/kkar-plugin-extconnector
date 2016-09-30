@@ -5,10 +5,12 @@ package kkdev.kksystem.plugin.extconnector;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import kkdev.kksystem.base.classes.plugins.PluginConfiguration;
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import kkdev.kksystem.base.classes.plugins.simple.KKPluginBase;
 import kkdev.kksystem.plugin.extconnector.exconnmanager.EXConnManager;
 import kkdev.kksystem.base.interfaces.IPluginBaseConnection;
+import kkdev.kksystem.plugin.extconnector.configuration.PluginSettings;
 
 /**
  *
@@ -32,5 +34,9 @@ public final class KKPlugin extends KKPluginBase {
         super.executePin(Pin);
         Global.EM.ReceivePin(Pin);
 
+    }
+     @Override
+    public PluginConfiguration getPluginSettings() {
+       return PluginSettings.MainConfiguration;
     }
 }

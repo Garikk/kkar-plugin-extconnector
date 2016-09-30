@@ -5,11 +5,13 @@
  */
 package kkdev.kksystem.plugin.extconnector.configuration;
 
+import kkdev.kksystem.base.classes.plugins.PluginConfiguration;
+
 /**
  *
  * @author sayma_000
  */
-public class EXConfig {
+public class EXConfig extends PluginConfiguration {
     public EXAdapterConfig Adapters[];
     public EXAdapterMapping PluginMapping[];
 }
