@@ -9,8 +9,8 @@ import kkdev.kksystem.base.classes.plugins.PluginConfiguration;
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import kkdev.kksystem.base.classes.plugins.simple.KKPluginBase;
 import kkdev.kksystem.plugin.extconnector.exconnmanager.EXConnManager;
-import kkdev.kksystem.base.interfaces.IPluginBaseConnection;
 import kkdev.kksystem.plugin.extconnector.configuration.PluginSettings;
+import kkdev.kksystem.base.interfaces.IBaseConnection;
 
 /**
  *
@@ -23,7 +23,7 @@ public final class KKPlugin extends KKPluginBase {
     }
 
     @Override
-    public void pluginInit(IPluginBaseConnection BaseConnector, String GlobalConfUID) {
+    public void pluginInit(IBaseConnection BaseConnector, String GlobalConfUID) {
         super.pluginInit(BaseConnector, GlobalConfUID); 
         Global.EM.Init(this);
     }
