@@ -172,7 +172,7 @@ public class EXAdapterInet implements IEXAdapter {
     private static List<NameValuePair> GetPinRequest() {
         List<NameValuePair> nameValuePairs = new ArrayList<>(1);
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_ACT,
-                WEBMASTER_REQUEST_EXTCONN_GETPIN));
+                String.valueOf(WEBMASTER_REQUEST_EXTCONN_GETPIN)));
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_MYUUID,
                 ___TEST_KKCAR_UUID_));
 
@@ -182,7 +182,7 @@ public class EXAdapterInet implements IEXAdapter {
     private static List<NameValuePair> GetPinPost(WM_EXConn_PinData ReqFiles) {
         List<NameValuePair> nameValuePairs = new ArrayList<>(3);
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_ACT,
-                WEBMASTER_REQUEST_EXTCONN_PUTPIN));
+                String.valueOf(WEBMASTER_REQUEST_EXTCONN_PUTPIN)));
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_MYUUID,
                 ___TEST_KKCAR_UUID_));
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_EXTCONN_PINDATA,
