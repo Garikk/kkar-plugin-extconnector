@@ -40,7 +40,7 @@ public class EXAdapterInet implements IEXAdapter {
     int IntervalTune;
 
     EXAdapterConfig Configuration;
-    final static String ___TEST_KKCAR_UUID_ = "2e2efd7b-ab83-42fa-9c00-2e45bb4b3ba1";
+    final static String ___TEST_kkiot_UUID_ = "2e2efd7b-ab83-42fa-9c00-2e45bb4b3ba1";
 
     public EXAdapterInet(EXAdapterConfig Conf, IEXConnManager Conn) {
         Configuration = Conf;
@@ -174,7 +174,7 @@ public class EXAdapterInet implements IEXAdapter {
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_ACT,
                 String.valueOf(WEBMASTER_REQUEST_EXTCONN_GETPIN)));
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_MYUUID,
-                ___TEST_KKCAR_UUID_));
+                ___TEST_kkiot_UUID_));
 
         return nameValuePairs;
     }
@@ -184,7 +184,7 @@ public class EXAdapterInet implements IEXAdapter {
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_ACT,
                 String.valueOf(WEBMASTER_REQUEST_EXTCONN_PUTPIN)));
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_MYUUID,
-                ___TEST_KKCAR_UUID_));
+                ___TEST_kkiot_UUID_));
         nameValuePairs.add(new BasicNameValuePair(WEBMASTER_REQUEST_EXTCONN_PINDATA,
                 ReqFiles.GetJson()));
 
