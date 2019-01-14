@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kkdev.kksystem.plugin.extconnector.adapters.json_pin;
+package kkdev.kksystem.plugin.extconnector.adapters.rabbitmq;
 
+import kkdev.kksystem.plugin.extconnector.adapters.json_pin.*;
 import kkdev.kksystem.base.classes.plugins.PluginMessage;
 import static kkdev.kksystem.base.constants.PluginConsts.KK_PLUGIN_BASE_BASIC_TAGGEDOBJ_DATA;
 import kkdev.kksystem.plugin.extconnector.adapters.IEXAdapter;
@@ -26,14 +27,14 @@ import static kkdev.kksystem.base.constants.SystemConsts.KK_BASE_FEATURES_SYSTEM
  *
  * @author sayma_000
  */
-public class EXAdapterJsonPin implements IEXAdapter {
+public class EXAdapterRabbitMQ implements IEXAdapter {
 
     boolean Enabled;
     IEXConnManager ConnManager;
     EXAdapterConfig MyConf;
     Gson gson;
 
-    public EXAdapterJsonPin(EXAdapterConfig Conf, IEXConnManager ConnectionManager) {
+    public EXAdapterRabbitMQ(EXAdapterConfig Conf, IEXConnManager ConnectionManager) {
         gson = new Gson();
         MyConf = Conf;
         ConnManager = ConnectionManager;
