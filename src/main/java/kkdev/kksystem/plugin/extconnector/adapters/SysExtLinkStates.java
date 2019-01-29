@@ -14,16 +14,19 @@ public class SysExtLinkStates {
     public boolean SystemInternetstate ;
     public boolean SystemWiFiState ;
     public boolean SystemBluetoothState ;
+    public boolean SystemRabbitMQLink ;
 
-    public SysExtLinkStates(boolean Inet, Boolean Wifi, Boolean BT) {
+    public SysExtLinkStates(boolean Inet, boolean Wifi, boolean BT, boolean RMQ) {
         SystemInternetstate = Inet;
         SystemWiFiState = Wifi;
         SystemBluetoothState = BT;
+        SystemRabbitMQLink = RMQ ;
     }
 
     public SysExtLinkStates() {
         SystemInternetstate = false;
         SystemWiFiState = false;
         SystemBluetoothState = false;
+        SystemRabbitMQLink = false;
     }
 }

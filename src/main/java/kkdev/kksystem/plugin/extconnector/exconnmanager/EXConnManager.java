@@ -104,7 +104,7 @@ public class EXConnManager extends PluginManagerBase implements IEXConnManager {
             case PluginConsts.KK_PLUGIN_BASE_CONTROL_COMMAND:
                 PinDataNotifySystemState PBK = (PinDataNotifySystemState) Pin.getPinData();
                 if (PBK.systemState==PinDataNotifySystemState.SystemStateInfo.INERNET_ACTIVE) {
-                    AlertStateChange(new SysExtLinkStates(true, false, false));
+                    AlertStateChange(new SysExtLinkStates(true, false, false, false));
                 } else if (PBK.systemState==PinDataNotifySystemState.SystemStateInfo.INERNET_ACTIVE) {
                     AlertStateChange(new SysExtLinkStates());
                 }
